@@ -4,20 +4,19 @@ import pygame
 pygame.init()
 
 # Set up the display
-screen_width = 800  # Set the width of the window
-screen_height = 600  # Set the height of the window
+screen_width = 700  # Set the width of the window
+screen_height = 1000  # Set the height of the window
 screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption("Space Ship Movement")
 
 # Load images
 background = pygame.image.load('assets/background.png')
 ship = pygame.image.load('assets/ship_single.png')
 
 # Set the initial position of the ship
-ship_rect = ship.get_rect(center=(screen_width // 2, screen_height // 2))
+ship_rect = ship.get_rect(center=(screen_width // 2, screen_height  - 50))
 
-# Set up the clock for frame rate control
-clock = pygame.time.Clock()
+# variables
+speed = 5
 
 # Main game loop
 running = True
@@ -27,7 +26,6 @@ while running:
             running = False
 
     keys = pygame.key.get_pressed()
-    speed = 5
     if keys[pygame.K_LEFT]:
         ship_rect.x -= speed
     if keys[pygame.K_RIGHT]:
@@ -40,6 +38,5 @@ while running:
     screen.blit(background, (0, 0))
     screen.blit(ship, ship_rect)
     pygame.display.flip()
-    clock.tick(60)
 
 pygame.quit()
