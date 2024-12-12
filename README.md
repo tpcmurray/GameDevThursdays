@@ -1,4 +1,4 @@
 # GameDevTuesdays
 
-Location of all lessons as Google Slides documents:
-https://drive.google.com/drive/folders/17uzhIq1oeTFHq6KNX8mGvYUIkwAgZW5n?usp=sharing
+Lesson-001: setup (vscode, python, pip, git)
+https://docs.google.com/presentation/d/1TvbglBZQDT62DZcjEWWKz2JnzV_1BKWGxOjKiL9hTc8/edit?usp=sharing
