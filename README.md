@@ -1,4 +1,4 @@
 # GameDevTuesdays
 
-Matching slide deck:
-https://docs.google.com/presentation/d/1uKtcCM_QQoaZWDiVmZi_pzX9aQ-4thXaxCU6UdGS4lk/edit?usp=sharing 
+Location of all lessons as Google Slides documents:
+https://drive.google.com/drive/folders/17uzhIq1oeTFHq6KNX8mGvYUIkwAgZW5n?usp=sharing
