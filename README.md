@@ -1,4 +1,11 @@
 # GameDevTuesdays
 
-Matching slide deck:
-https://docs.google.com/presentation/d/1uKtcCM_QQoaZWDiVmZi_pzX9aQ-4thXaxCU6UdGS4lk/edit?usp=sharing 
+Covering
+- gitea
+- music
+- sprite sheets
+- infinite scrolling background
+- random enemy ships
+
+Slide deck for lesson 003:
+https://docs.google.com/presentation/d/1E2KHFiBwhpzvElLo9JyFikjzIuMlqz5vqv4gwRkViJs/edit?usp=sharing
