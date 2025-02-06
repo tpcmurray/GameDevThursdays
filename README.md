@@ -1,1 +1,1 @@
-# GameDevTuesdays
+# GameDevThursdays
