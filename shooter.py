@@ -1,7 +1,4 @@
 import pygame
-import os
-
-from pygame.mixer import music
 
 # Initialize Pygame
 pygame.init()
@@ -12,29 +9,28 @@ screen_height = 1000  # Set the height of the window
 screen = pygame.display.set_mode((screen_width, screen_height))
 
 # load, play, and loop music at 50% volume
-music.load(os.path.join("assets", "backtrack.mp3"))
-music.set_volume(0.5)  # Set volume to 50% (0 to 1)
-music.play(-1)  # -1 means loop indefinitely
+# TODO 1 load music
+# TODO 1 set volume to 50%
+# TODO 1 loop infinitely 
 
+# TODO 2 comment out the below line and work on the lines below
+ship = pygame.image.load('assets/ship_single.png') 
 # load ship sprite sheet, load 3 ship images. the image is 192 x 64. all images are 64x64
-sprite_sheet = pygame.image.load(os.path.join("assets", "ship.png")).convert_alpha()
-sprite_width = sprite_sheet.get_width() // 3  # Divide by 3 since there are 3 frames
-sprite_height = sprite_sheet.get_height()
-ship_left = sprite_sheet.subsurface((0, 0, sprite_width, sprite_height))
-ship_center = sprite_sheet.subsurface((sprite_width, 0, sprite_width, sprite_height))
-ship_right = sprite_sheet.subsurface((sprite_width * 2, 0, sprite_width, sprite_height))
-ship = ship_center
+# TODO 2 load ship image, and use convert_alpha
+# TODO 2 create ship_left  (how big is the image? each ship is one third of the image size)
+#      use ship.subsurface to get the left ship
+# TODO 2 create ship_center
+# TODO 2 create ship_right
 
+# TODO 2 when do we switch the ship graphics?
 ship_rect = ship.get_rect(center=(screen_width // 2, screen_height  - 50))
 
 # Load background
 background = pygame.image.load('assets/background.png')
-background1_y = 0
-background2_y = -background.get_height()
-background_speed = 2
+# TODO 3 track the backgrounds y location
 
 # variables
-speed = 2
+speed = 5
 
 # Main game loop
 running = True
@@ -44,37 +40,20 @@ while running:
             running = False
 
     keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]:
+        ship_rect.x -= speed
+    if keys[pygame.K_RIGHT]:
+        ship_rect.x += speed
     if keys[pygame.K_UP]:
         ship_rect.y -= speed
     if keys[pygame.K_DOWN]:
         ship_rect.y += speed
 
-    # this section is an if, elif, else block to determine which image to use
-    if keys[pygame.K_LEFT]:
-        ship_rect.x -= speed
-        ship = ship_left
-    elif keys[pygame.K_RIGHT]:
-        ship_rect.x += speed
-        ship = ship_right
-    else:
-        ship = ship_center
+    # TODO 3 scroll the background before drawing it, along the y axis
 
-    # scroll the background before drawing it, along the y axis
-    background1_y += background_speed
-    background2_y += background_speed
-    if background1_y > screen_height: # if the background is off the screen, reset it
-        background1_y = -background.get_height()
-    if background2_y > screen_height: # if the background is off the screen, reset it
-        background2_y = -background.get_height()
-
-    # Draw the two copies of the background
-    screen.blit(background, (0, background1_y))
-    screen.blit(background, (0, background2_y))
-
-    # Draw the ship
+    # TODO 3 the below line needs to change, and you need another like it for the 2nd copy
+    screen.blit(background, (0, 0))
     screen.blit(ship, ship_rect)
-
-    # Update the display
     pygame.display.flip()
 
 pygame.quit()
