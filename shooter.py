@@ -89,7 +89,7 @@ while running:
         enemy_rect = enemy[0]
         x_speed = enemy[1]
         enemy_rect.x += x_speed  # Move horizontally based on x_speed
-        enemy_rect.y += 2         # Move down
+        enemy_rect.y += 2        # Move down the screen 2 pixels
         
         # Remove if off screen (bottom or sides)
         if enemy_rect.top > screen_height or enemy_rect.left < -50 or enemy_rect.right > screen_width + 50:
