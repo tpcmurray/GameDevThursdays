@@ -1,5 +1,6 @@
 import pygame
 import os
+import random
 
 from pygame.mixer import music
 
@@ -27,6 +28,9 @@ ship = ship_center
 
 ship_rect = ship.get_rect(center=(screen_width // 2, screen_height  - 50))
 
+# Load enemy
+enemy_img = pygame.image.load(os.path.join("assets", "enemy1.png")).convert_alpha()
+
 # Load background
 background = pygame.image.load('assets/background.png')
 background1_y = 0
@@ -35,6 +39,8 @@ background_speed = 2
 
 # variables
 speed = 2
+enemies = []  # List to store enemies - each enemy will be [rect, x_speed]
+count_frames = 0
 
 # Main game loop
 running = True
@@ -42,6 +48,11 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+    # Update the frame counter
+    count_frames += 1
+    if count_frames > 60:  # Reset frame counter every 60 frames
+        count_frames = 0    
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_UP]:
@@ -59,6 +70,31 @@ while running:
     else:
         ship = ship_center
 
+    # Spawn a new enemy
+    if count_frames >= 60:                     # Spawn enemy every 60 frames
+        enemy_rect = enemy_img.get_rect()      # the sprite
+
+        # Randomize the enemy's position and speed
+        enemy_rect.x = random.randint(0, screen_width - enemy_rect.width)
+        enemy_rect.y = -enemy_rect.height
+        x_speed = random.uniform(-1, 1)
+        if x_speed < .5 and x_speed > -.5:
+            x_speed = 1
+
+        # Add the enemy to the list
+        enemies.append([enemy_rect, x_speed])
+
+    # Move enemies down
+    for enemy in enemies[:]:
+        enemy_rect = enemy[0]
+        x_speed = enemy[1]
+        enemy_rect.x += x_speed  # Move horizontally based on x_speed
+        enemy_rect.y += 2         # Move down
+        
+        # Remove if off screen (bottom or sides)
+        if enemy_rect.top > screen_height or enemy_rect.left < -50 or enemy_rect.right > screen_width + 50:
+            enemies.remove(enemy)
+
     # scroll the background before drawing it, along the y axis
     background1_y += background_speed
     background2_y += background_speed
@@ -67,12 +103,14 @@ while running:
     if background2_y > screen_height: # if the background is off the screen, reset it
         background2_y = -background.get_height()
 
-    # Draw the two copies of the background
+    # Draw everything
     screen.blit(background, (0, background1_y))
     screen.blit(background, (0, background2_y))
-
-    # Draw the ship
     screen.blit(ship, ship_rect)
+    
+    # Draw all enemies
+    for enemy in enemies:
+        screen.blit(enemy_img, enemy[0])
 
     # Update the display
     pygame.display.flip()
