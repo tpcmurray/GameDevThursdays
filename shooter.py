@@ -1,5 +1,6 @@
 import pygame
 import os
+# TODO 1: we need to import 'random' to generate random numbers
 
 from pygame.mixer import music
 
@@ -27,6 +28,8 @@ ship = ship_center
 
 ship_rect = ship.get_rect(center=(screen_width // 2, screen_height  - 50))
 
+# TODO 2: load the enemy sprite, same as line 21
+
 # Load background
 background = pygame.image.load('assets/background.png')
 background1_y = 0
@@ -35,6 +38,8 @@ background_speed = 2
 
 # variables
 speed = 2
+# TODO 3: create an ARRAY to store all enemy sprite TUPLES [rect, x_speed (sideways movement)] 
+# TODO 4: create a simple variable to store the frane count
 
 # Main game loop
 running = True
@@ -42,6 +47,8 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+# TODO 5: keep track of the frame count. every 60 frames or greater, reset to zero
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_UP]:
@@ -59,6 +66,16 @@ while running:
     else:
         ship = ship_center
 
+# TODO 6: spawn a new enemy every 60 frames
+    # randomize enemy position and speed
+    # add the enemy to your array, so you can track it
+
+# TODO 7: move enemies down the screen at y +2 
+    # loop through all enemies, and move them down the screen
+    # read out (from the tuple) the enemy rect and the x axis speed
+    # remove enemies that are off the screen (check against screen width and height)
+
+
     # scroll the background before drawing it, along the y axis
     background1_y += background_speed
     background2_y += background_speed
@@ -73,6 +90,8 @@ while running:
 
     # Draw the ship
     screen.blit(ship, ship_rect)
+
+# TODO : draw all the enemies. same as drawing the ship, but in a loop
 
     # Update the display
     pygame.display.flip()
