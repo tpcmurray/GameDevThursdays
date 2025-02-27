@@ -31,6 +31,10 @@ ship_rect = ship.get_rect(center=(screen_width // 2, screen_height  - 50))
 # Load enemy
 enemy_img = pygame.image.load(os.path.join("assets", "enemy1.png")).convert_alpha()
 
+# TODO 1: Load beam (like line 32)
+
+# TODO 2: Load 2 laser sounds into a list (see: pygame.mixer.Sound)
+
 # Load background
 background = pygame.image.load('assets/background.png')
 background1_y = 0
@@ -40,6 +44,7 @@ background_speed = 2
 # variables
 speed = 2
 enemies = []  # List to store enemies - each enemy will be [rect, x_speed]
+# TODO 3: a List to store beams, same as enemies above
 count_frames = 0
 
 # Main game loop
@@ -48,6 +53,11 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        # TODO 4: Check for space key press to create a new beam
+        #   1. Create a new beam
+        #   2. set the beams x and y to the ship's nose x and y
+        #   3. Add the beam to the list of beams
+        # TODO 5: Play a random laser sound when a beam is created
 
     # Update the frame counter
     count_frames += 1
@@ -94,6 +104,9 @@ while running:
         # Remove if off screen (bottom or sides)
         if enemy_rect.top > screen_height or enemy_rect.left < -50 or enemy_rect.right > screen_width + 50:
             enemies.remove(enemy)
+    
+    # TODO 6: Move beams up the screen and remove if off screen (top)
+    #    This is very similar to the code above for moving enemies
 
     # scroll the background before drawing it, along the y axis
     background1_y += background_speed
@@ -111,6 +124,9 @@ while running:
     # Draw all enemies
     for enemy in enemies:
         screen.blit(enemy_img, enemy[0])
+        
+    # TODO 7: Draw all beams
+    #    This is very similar to the code above for drawing enemies
 
     # Update the display
     pygame.display.flip()
