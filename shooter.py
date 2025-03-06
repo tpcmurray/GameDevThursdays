@@ -41,6 +41,14 @@ laser_sounds = [
     pygame.mixer.Sound(os.path.join("assets", "laser3.mp3"))
 ]
 
+# Load explosion image and sound
+# TODO 1: Load explosion image, same as line 35, but for explosion.png
+# TODO 2: Load explosion sound, similar to how laser sounds are loaded. explosion.wav is the sound file
+
+# Function to create explosion frames
+# TODO 3: Create a list of explosion frames by splitting the explosion image into 5 frames of 128x128 pixels each
+#       and storing them in a list. You'll need the subsurface method, like lines 24-26.
+
 # Load background
 background = pygame.image.load('assets/background.png')
 background1_y = 0
@@ -51,6 +59,7 @@ background_speed = 2
 speed = 2
 enemies = []  # List to store enemies - each enemy will be [rect, x_speed]
 beams = []    # List to store active beams
+# TODO 4: Add another list variable to keep track of the explosions. 
 count_frames = 0
 
 # Main game loop
@@ -122,6 +131,17 @@ while running:
         if beam.bottom < 0:  # Remove if off screen (top)
             beams.remove(beam)
 
+    # Check for collisions between beams and enemies
+    # TODO 5: Start with a for loop, looping through the beams, same as line 129
+    # TODO 6: Inside the loop, add another for loop to loop through the enemies
+    # TODO 7: Inside the enemy loop, check IF the beam collides with the enemy, using the colliderect method: beam.colliderect(enemy[0]):
+    # TODO 8: If there is a collision:
+    #   remove the beam its list
+    #   remove the enemy from its list
+    #   add an explosion at the enemy's position
+    #       the explosion array should be a list with the enemy's top left position, the current frame of the explosion, which is 0, and the current time
+    #   play the explosion sound
+
     # scroll the background before drawing it, along the y axis
     background1_y += background_speed
     background2_y += background_speed
@@ -142,6 +162,13 @@ while running:
     # Draw all beams
     for beam in beams:
         screen.blit(beam_img, beam)
+
+    # Draw all explosions
+    # TODO 9: record the current time
+    # TODO 10: loop through the explosions list
+    # TODO 11: if the current time - the explosion's start time is greater than 20 (milliseconds), move to the next frame
+    # TODO 12: if the frame is greater than the length of the explosion frames (we are past the last frame), remove the explosion
+    # TODO 13: otherwise, draw the explosion frame as is
 
     # Update the display
     pygame.display.flip()
