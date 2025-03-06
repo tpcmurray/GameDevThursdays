@@ -41,6 +41,13 @@ laser_sounds = [
     pygame.mixer.Sound(os.path.join("assets", "laser3.mp3"))
 ]
 
+# Load explosion image and sound
+explosion_img = pygame.image.load(os.path.join("assets", "explosion.png")).convert_alpha()
+explosion_sound = pygame.mixer.Sound(os.path.join("assets", "explosion.wav"))
+
+# Function to create explosion frames
+explosion_frames = [explosion_img.subsurface((i * 128, 0, 128, 128)) for i in range(5)]
+
 # Load background
 background = pygame.image.load('assets/background.png')
 background1_y = 0
@@ -51,6 +58,7 @@ background_speed = 2
 speed = 2
 enemies = []  # List to store enemies - each enemy will be [rect, x_speed]
 beams = []    # List to store active beams
+explosions = []  # List to store active explosions
 count_frames = 0
 
 # Main game loop
@@ -122,6 +130,16 @@ while running:
         if beam.bottom < 0:  # Remove if off screen (top)
             beams.remove(beam)
 
+    # Check for collisions between beams and enemies
+    for beam in beams[:]:
+        for enemy in enemies[:]:
+            if beam.colliderect(enemy[0]):
+                beams.remove(beam)
+                enemies.remove(enemy)
+                explosions.append([enemy[0].topleft, 0, pygame.time.get_ticks()])  # Add explosion at enemy position
+                explosion_sound.play()
+                break
+
     # scroll the background before drawing it, along the y axis
     background1_y += background_speed
     background2_y += background_speed
@@ -142,6 +160,20 @@ while running:
     # Draw all beams
     for beam in beams:
         screen.blit(beam_img, beam)
+
+    # Draw all explosions
+    current_time = pygame.time.get_ticks()
+    for explosion in explosions[:]:
+        pos, frame, start_time = explosion
+        if current_time - start_time >= 20:  # Move to the next frame every 20 ms
+            frame += 1
+            start_time = current_time
+        if frame >= len(explosion_frames):
+            explosions.remove(explosion)  # Remove explosion after last frame
+        else:
+            screen.blit(explosion_frames[frame], pos)
+            explosion[1] = frame
+            explosion[2] = start_time
 
     # Update the display
     pygame.display.flip()
