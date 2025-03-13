@@ -3,5 +3,5 @@
 Covering
 - ?
 
-Slide deck for lesson 006:
+Slide deck for lesson 008:
 (in progress)
