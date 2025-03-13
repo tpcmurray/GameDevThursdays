@@ -52,7 +52,7 @@ explosion_frames = [explosion_img.subsurface((i * 128, 0, 128, 128)) for i in ra
 background = pygame.image.load('assets/background.png')
 background1_y = 0
 background2_y = -background.get_height()
-background_speed = 2
+background_speed = 0.5
 
 # variables
 speed = 2
@@ -60,6 +60,7 @@ enemies = []  # List to store enemies - each enemy will be [rect, x_speed]
 beams = []    # List to store active beams
 explosions = []  # List to store active explosions
 count_frames = 0
+spawn_enemies_every = 200  # Spawn an enemy every so many frames
 
 # Main game loop
 running = True
@@ -80,7 +81,7 @@ while running:
 
     # Update the frame counter
     count_frames += 1
-    if count_frames > 60:  # Reset frame counter every 60 frames
+    if count_frames > spawn_enemies_every:  # Reset frame counter
         count_frames = 0    
 
     keys = pygame.key.get_pressed()
@@ -100,29 +101,33 @@ while running:
         ship = ship_center
 
     # Spawn a new enemy
-    if count_frames >= 60:                     # Spawn enemy every 60 frames
+    if count_frames >= spawn_enemies_every:                   # Spawn enemy every so many frames
         enemy_rect = enemy_img.get_rect()      # the sprite
 
         # Randomize the enemy's position and speed
         enemy_rect.x = random.randint(0, screen_width - enemy_rect.width)
         enemy_rect.y = -enemy_rect.height
-        x_speed = random.uniform(-1, 1)
-        if x_speed < .5 and x_speed > -.5:
-            x_speed = 1
+        x_speed = random.uniform(-2, 2)
+        if x_speed < .1 and x_speed > -.1:
+            x_speed = .3
 
         # Add the enemy to the list
-        enemies.append([enemy_rect, x_speed])
+        enemies.append([enemy_rect, x_speed, enemy_rect.x, enemy_rect.y])
 
     # Move enemies down
     for enemy in enemies[:]:
         enemy_rect = enemy[0]
         x_speed = enemy[1]
-        enemy_rect.x += x_speed  # Move horizontally based on x_speed
-        enemy_rect.y += 2        # Move down the screen 2 pixels
+
+        enemy[2] += x_speed                      # Update the original x position
+        enemy[3] += 1.0 * random.uniform(1, 2)  # Enemy speed, randomized
         
-        # Remove if off screen (bottom or sides)
-        if enemy_rect.top > screen_height or enemy_rect.left < -50 or enemy_rect.right > screen_width + 50:
-            enemies.remove(enemy)
+        enemy_rect.x = enemy[2]  # Move horizontally based on x_speed
+        enemy_rect.y = enemy[3]  # Move vertically
+        
+        # reverse direction if enemy hits the edge of the screen
+        if enemy_rect.x <= 0 or enemy_rect.x > screen_width - enemy_rect.width:
+            enemy[1] = -enemy[1]
     
     # Move beams up
     for beam in beams[:]:
