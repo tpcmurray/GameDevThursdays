@@ -54,10 +54,19 @@ background1_y = 0
 background2_y = -background.get_height()
 background_speed = 0.5
 
+# Load projectile
+projectile_img = pygame.image.load(os.path.join("assets", "projectile.png")).convert_alpha()
+
+# Add font initialization
+game_font = pygame.font.Font("assets/font.ttf", 36)
+
 # variables
+player_health = 100
 speed = 2
+score = 0  # Add score variable
 enemies = []  # List to store enemies - each enemy will be [rect, x_speed]
 beams = []    # List to store active beams
+enemy_bullets = []  # List to store enemy bullets [rect, dx, dy]
 explosions = []  # List to store active explosions
 count_frames = 0
 spawn_enemies_every = 200  # Spawn an enemy every so many frames
@@ -113,6 +122,23 @@ while running:
 
         # Add the enemy to the list
         enemies.append([enemy_rect, x_speed, enemy_rect.x, enemy_rect.y])
+        
+        # Random chance for existing enemies to shoot
+        for enemy in enemies:
+            if random.random() < 0.5:  # % chance to shoot
+                bullet = projectile_img.get_rect()
+                bullet.centerx = enemy[0].centerx
+                bullet.top = enemy[0].bottom
+                
+                # Calculate direction to player
+                dx = ship_rect.centerx - bullet.centerx
+                dy = ship_rect.centery - bullet.centery
+                # Normalize the direction vector
+                length = (dx * dx + dy * dy) ** 0.5
+                if length > 0:
+                    dx = dx / length * 3  # Speed of 3
+                    dy = dy / length * 3
+                enemy_bullets.append([bullet, dx, dy])
 
     # Move enemies down
     for enemy in enemies[:]:
@@ -135,6 +161,20 @@ while running:
         if beam.bottom < 0:  # Remove if off screen (top)
             beams.remove(beam)
 
+    # Move enemy bullets in their calculated direction
+    for bullet in enemy_bullets[:]:
+        bullet[0].x += bullet[1]  # Move by dx
+        bullet[0].y += bullet[2]  # Move by dy
+
+        # Check if bullet hits player
+        if bullet[0].colliderect(ship_rect):
+            enemy_bullets.remove(bullet)
+            player_health -= 25
+            if player_health <= 0:
+                running = False
+        elif bullet[0].top > screen_height or bullet[0].bottom < 0 or bullet[0].left > screen_width or bullet[0].right < 0:
+            enemy_bullets.remove(bullet)
+
     # Check for collisions between beams and enemies
     for beam in beams[:]:
         for enemy in enemies[:]:
@@ -143,6 +183,7 @@ while running:
                 enemies.remove(enemy)
                 explosions.append([enemy[0].topleft, 0, pygame.time.get_ticks()])  # Add explosion at enemy position
                 explosion_sound.play()
+                score += 100  # Add score when enemy is destroyed
                 break
 
     # scroll the background before drawing it, along the y axis
@@ -162,6 +203,10 @@ while running:
     for enemy in enemies:
         screen.blit(enemy_img, enemy[0])
         
+    # Draw all enemy bullets
+    for bullet in enemy_bullets:
+        screen.blit(projectile_img, bullet[0])
+        
     # Draw all beams
     for beam in beams:
         screen.blit(beam_img, beam)
@@ -179,6 +224,12 @@ while running:
             screen.blit(explosion_frames[frame], pos)
             explosion[1] = frame
             explosion[2] = start_time
+    
+    # Draw score and health
+    score_text = game_font.render(f"Score: {score}", True, (255, 255, 255))
+    health_text = game_font.render(f"Health: {player_health}", True, (255, 255, 255))
+    screen.blit(score_text, (10, 10))
+    screen.blit(health_text, (10, 50))
 
     # Update the display
     pygame.display.flip()
