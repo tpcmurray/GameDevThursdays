@@ -54,6 +54,13 @@ background1_y = 0
 background2_y = -background.get_height()
 background_speed = 0.5
 
+# TODO 1: Load projectile sprite (see same as line 35)
+
+# TODO 2: Load FONT!
+# use file font.tff in the assets folder. 
+# To load it, see the pygame.font.Font() function at: https://www.pygame.org/docs/ref/font.html#pygame.font.Font
+# you'll want to also specify the size of the font. try 36 to start, and make it as big or small as you like.
+
 # variables
 speed = 2
 enemies = []  # List to store enemies - each enemy will be [rect, x_speed]
@@ -61,6 +68,11 @@ beams = []    # List to store active beams
 explosions = []  # List to store active explosions
 count_frames = 0
 spawn_enemies_every = 200  # Spawn an enemy every so many frames
+
+# TODO 3: create variables as follows:
+# player_health, set to 100
+# score, set to 0
+# enemy_bullets, which is an empty list same as line 67
 
 # Main game loop
 running = True
@@ -114,6 +126,14 @@ while running:
         # Add the enemy to the list
         enemies.append([enemy_rect, x_speed, enemy_rect.x, enemy_rect.y])
 
+        # TODO 4: sometimes enemies shoot.
+        # loop through all enemies
+        #   for each enemy, randomly decide if they shoot
+        #       if they shoot, create a new bullet (see line 117)
+        #       set the bullet's position to the enemy's position
+        #       (optional bonus points, have the bullet move towards the player, instead of straight down!)
+        #       add the bullet to the enemy_bullets list
+
     # Move enemies down
     for enemy in enemies[:]:
         enemy_rect = enemy[0]
@@ -134,6 +154,15 @@ while running:
         beam.y -= 5  # Move beam up the screen
         if beam.bottom < 0:  # Remove if off screen (top)
             beams.remove(beam)
+
+    # TODO 5: Move enemy bullets 
+    # loop through all enemy bullets
+    #   for each bullet, move it across the screen (change its X and or Y value)
+    #   
+    #   check if bullet collides with player (see line 170)
+    #      if it does, remove the bullet and decrease player_health by 25
+    #      if player_health is less than or equal to 0, end the game (set running = false)
+    #   else, if bullet is off the screen remove it from the list
 
     # Check for collisions between beams and enemies
     for beam in beams[:]:
@@ -162,6 +191,8 @@ while running:
     for enemy in enemies:
         screen.blit(enemy_img, enemy[0])
         
+    # TODO 6: Draw all enemy bullets. (copy enemy drawing just above)
+    
     # Draw all beams
     for beam in beams:
         screen.blit(beam_img, beam)
@@ -179,6 +210,12 @@ while running:
             screen.blit(explosion_frames[frame], pos)
             explosion[1] = frame
             explosion[2] = start_time
+
+    # TODO 7: Draw the player's health and score on the screen
+    # create a score variable using game_font.render. see pygame dox at https://www.pygame.org/docs/ref/font.html#pygame.font.Font.render
+    # create a health variable using game_font.render 
+    # blit score and health to the top left of the screen
+
 
     # Update the display
     pygame.display.flip()
